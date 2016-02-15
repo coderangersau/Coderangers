@@ -4,7 +4,7 @@ import string
 import sys
 import traceback
 
-from scratch_accounts.create import create_account
+from create import create_account
 
 
 def fix(name):
@@ -52,11 +52,12 @@ def masterlist_update(filename):
     writer = csv.DictWriter(f, ('User Name', 'Password', 'Scratch account created'))
     writer.writeheader()
     for row in csv.DictReader(open(filename + '.csv')):
-        if row['Scratch account created'] == '1' or row['Enrolled Student'] == 'FALSE':
+        if row['Scratch account created'] == '1' or row['Enrolled Student'] != 'TRUE':
             username = row['User Name']
             password = row['Password']
             created = row['Scratch account created']
         else:
+            print(row)
             first = row['SF Name'][0]
             last = row['SL Name'][0]
             base_username = 'Ranger' + first.upper() + last.upper()

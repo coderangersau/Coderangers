@@ -1,9 +1,10 @@
 import csv
+import random
 import string
 import sys
 import traceback
 
-from scratch_accounts.scratch import create_account
+from scratch_accounts.create import create_account
 
 
 def fix(name):
@@ -45,7 +46,8 @@ def csv_batch_create(filename, firstnamefield, lastnamefield, username_fn, passw
 # )
 
 
-def csv_batch_details_create(filename):
+def masterlist_update(filename):
+    accounts_created = 0
     f = open(filename + '_out.csv', 'w')
     writer = csv.DictWriter(f, ('User Name', 'Password', 'Scratch account created'))
     writer.writeheader()
@@ -55,13 +57,19 @@ def csv_batch_details_create(filename):
             password = row['Password']
             created = row['Scratch account created']
         else:
+            first = row['SF Name'][0]
+            last = row['SL Name'][0]
+            base_username = 'Ranger' + first.upper() + last.upper()
+            base_password = 'CR' + first.upper() + last.upper() + str(random.randint(0, 999)).zfill(3)
             for i in range(999):
                 i = '' if i == 0 else str(i)
-                username = row['User Name'] + i
-                password = row['Password'][:4] + i + row['Password'][4:]
+                username = base_username + i
+                password = base_password[:4] + i + row['Password'][4:]
                 if create_account(username, password): break
             created = '1'
+            accounts_created += 1
         writer.writerow({'User Name': username, 'Password': password, 'Scratch account created': created})
+
     f.close()
 
-csv_batch_details_create('batch3')
+masterlist_update('masterlist')

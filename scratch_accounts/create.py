@@ -43,6 +43,8 @@ def create_account(username, password, **fields):
                 )
                 element.send_keys(fields[field])
             driver.find_element_by_id('registration-next').click()
+        print('Created username {}, password {} with fields {}'.format(username, password, fields))
         return True
     except Exception:
+        print('Scratch account for username {} and password {} with fields {} failed'.format(username, password, fields))
         return False
